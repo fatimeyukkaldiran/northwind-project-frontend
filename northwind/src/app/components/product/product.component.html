@@ -1,18 +1,27 @@
 <div *ngIf="dataLoaded == false" class="spinner-border text-info m-4" role="status">
 </div>
+<div class="mb-3">
+    <label for="filterText" class="form-label">Search a products</label>
+    <input type="text" [(ngModel)] = "filterText" class="form-control" id="filterText" placeholder="search">
+  </div>
+  <div *ngIf = "filterText" class="alert alert-primary">
+    You searched {{filterText}} 
+  </div>
 <table *ngIf="dataLoaded == true" class="table">
     <thead>
         <th>Product Id</th>
         <th>Category Id</th>
         <th>Product name</th>
         <th>Unit Price</th>
+        <th>Vat Unit Price </th>
         <th>Units In Stock</th>
     </thead>
-    <tr *ngFor="let product of products">
+    <tr *ngFor="let product of products |filterPipe:filterText">
         <td>{{product.productId}}</td>
         <td>{{product.categoryId}}</td>
-        <td>{{product.productName}}</td>
-        <td>{{product.unitPrice}}</td>
+        <td>{{product.productName | uppercase}}</td>
+        <td>{{product.unitPrice |currency}}</td>
+        <td>{{product.unitPrice |vatAdded:18 |currency}}</td>
         <td>{{product.unitsInStock}}</td>
     </tr>
 </table>
